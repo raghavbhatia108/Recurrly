@@ -15,7 +15,7 @@ export default function App() {
         href="/onboarding"
         className="mt-5 bg-primary text-white rounded p-4"
       >
-        Get Started
+        Get Started!
       </Link>
       <Link
         href="/(auth)/sign-in"
