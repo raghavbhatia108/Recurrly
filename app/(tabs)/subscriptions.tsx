@@ -27,7 +27,7 @@ const Subscriptions = () => {
         data={filteredSubscriptions}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={
-          <View className="px-5 pt-5">
+          <View className=" pt-5">
             <Text className="text-3xl font-bold text-dark mb-5">
               Subscriptions
             </Text>
