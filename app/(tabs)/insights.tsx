@@ -46,7 +46,7 @@ const Insights = () => {
             return (
               <View key={index} className="items-center">
                 {isHighlighted ? (
-                  <View className="mb-2 rounded-full bg-[#ef4444] px-3 py-1">
+                  <View className="mb-2 rounded-full bg-accent px-3 py-1">
                     <Text className="text-xs font-bold text-white">$40</Text>
                   </View>
                 ) : (
@@ -55,7 +55,7 @@ const Insights = () => {
 
                 <View
                   style={[styles.bar, { height: barHeight }]}
-                  className={isHighlighted ? "bg-red-500" : "bg-black"}
+                  className={isHighlighted ? "bg-accent" : "bg-black"}
                 />
                 <Text className="text-xs text-gray-400 mt-2">
                   {chartLabels[index]}
