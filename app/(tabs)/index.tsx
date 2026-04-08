@@ -2,6 +2,7 @@ import "@/global.css";
 import { formatCurrency } from "@/lib/utils";
 import { useUser } from "@clerk/expo";
 import dayjs from "dayjs";
+import { router } from "expo-router";
 import { styled } from "nativewind";
 import { usePostHog } from "posthog-react-native";
 import { useMemo, useState } from "react";
@@ -12,7 +13,7 @@ import CreateSubscriptionModal from "../components/CreateSubscriptionModal";
 import ListHeading from "../components/ListHeading";
 import SubscriptionCard from "../components/Subscriptioncard";
 import UpcomingSubscriptionCard from "../components/UpcomingSubscriptionCard";
-import { HOME_BALANCE } from "../constants/data";
+import { HOME_BALANCE, UPCOMING_SUBSCRIPTIONS } from "../constants/data";
 import { icons } from "../constants/icons";
 import { images } from "../constants/images";
 const SafeAreaView = styled(RNSafeAreaView);
@@ -28,17 +29,8 @@ export default function App() {
 
   // Get upcoming subscriptions (active subscriptions with renewal date within next 7 days)
   const upcomingSubscriptions = useMemo(() => {
-    const now = dayjs();
-    const nextWeek = now.add(7, "days");
-    return subscriptions
-      .filter(
-        (sub) =>
-          sub.status === "active" &&
-          dayjs(sub.renewalDate).isAfter(now) &&
-          dayjs(sub.renewalDate).isBefore(nextWeek),
-      )
-      .sort((a, b) => dayjs(a.renewalDate).diff(dayjs(b.renewalDate)));
-  }, [subscriptions]);
+    return UPCOMING_SUBSCRIPTIONS.sort((a, b) => a.daysLeft - b.daysLeft);
+  }, []);
 
   const handleSubscriptionPress = (item: Subscription) => {
     const isExpanding = expandedSubscriptionId !== item.id;
@@ -59,8 +51,8 @@ export default function App() {
     posthog.capture("subscription_created", {
       subscription_name: newSubscription.name,
       subscription_price: newSubscription.price,
-      subscription_frequency: newSubscription.frequency,
-      subscription_category: newSubscription.category,
+      subscription_frequency: newSubscription.billing,
+      subscription_category: newSubscription.category || "Uncategorized",
     });
   };
 
@@ -76,15 +68,17 @@ export default function App() {
       <FlatList
         ListHeaderComponent={() => (
           <>
-            <View className="home-header">
-              <View className="home-user">
-                <Image
-                  source={
-                    user?.imageUrl ? { uri: user.imageUrl } : images.avatar
-                  }
-                  className="home-avatar"
-                />
-                <Text className="home-user-name">{displayName}</Text>
+            <View className="home-header flex-row items-center justify-between">
+              <View className="home-user flex-row items-center flex-1">
+                <Image source={images.avatar} className="home-avatar" />
+
+                <Text
+                  className="home-user-name flex-shrink"
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
+                  {displayName}
+                </Text>
               </View>
 
               <Pressable onPress={() => setIsModalVisible(true)}>
@@ -123,8 +117,12 @@ export default function App() {
                 }
               />
             </View>
-
-            <ListHeading title="All Subscriptions" />
+            <ListHeading
+              title="All Subscriptions"
+              onPress={() => {
+                router.push("/subscriptions");
+              }}
+            />
           </>
         )}
         data={subscriptions}

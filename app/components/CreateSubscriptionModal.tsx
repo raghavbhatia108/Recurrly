@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { clsx } from "clsx";
 import dayjs from "dayjs";
 import React, { useState } from "react";
 import {
@@ -80,7 +80,6 @@ const CreateSubscriptionModal = ({
       name: name.trim(),
       price: priceValue,
       currency: "USD",
-      frequency,
       category,
       status: "active",
       startDate: now.toISOString(),

@@ -31,7 +31,7 @@ export const UPCOMING_SUBSCRIPTIONS: UpcomingSubscription[] = [
     name: "Notion",
     price: 12.0,
     currency: "USD",
-    daysLeft: 4,
+    daysLeft: 1,
   },
   {
     id: "figma",

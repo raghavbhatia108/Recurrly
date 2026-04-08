@@ -1,6 +1,6 @@
 import { formatCurrency } from "@/lib/utils";
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Text, View } from "react-native";
 
 const UpcomingSubscriptionCard = ({
   name,
@@ -28,5 +28,3 @@ const UpcomingSubscriptionCard = ({
 };
 
 export default UpcomingSubscriptionCard;
-
-const styles = StyleSheet.create({});
