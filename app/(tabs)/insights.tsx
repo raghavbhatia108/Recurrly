@@ -1,6 +1,6 @@
 import { router } from "expo-router";
 import { styled } from "nativewind";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 import { useSubscriptionStore } from "../../lib/subscriptionStore";
