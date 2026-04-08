@@ -1,14 +1,18 @@
-import { formatCurrency, formatSubscriptionDateTime } from "@/lib/utils";
+import {
+  formatCurrency,
+  formatStatusLabel,
+  formatSubscriptionDateTime,
+} from "@/lib/utils";
 import clsx from "clsx";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
 
-const Subscriptioncard = ({
+const SubscriptionCard = ({
   name,
   price,
-  billing,
   currency,
   icon,
+  billing,
   color,
   category,
   plan,
@@ -23,27 +27,29 @@ const Subscriptioncard = ({
     <Pressable
       onPress={onPress}
       className={clsx("sub-card", expanded ? "sub-card-expanded" : "bg-card")}
-      style={!expanded && color ? { backgroundColor: color } : {}}
+      style={!expanded && color ? { backgroundColor: color } : undefined}
     >
       <View className="sub-head">
         <View className="sub-main">
-          <Image className="sub-icon" source={icon} />
+          <Image source={icon} className="sub-icon" />
           <View className="sub-copy">
-            <Text className="sub-title" numberOfLines={1}>
+            <Text numberOfLines={1} className="sub-title">
               {name}
             </Text>
-            <Text>
+            <Text numberOfLines={1} ellipsizeMode="tail" className="sub-meta">
               {category?.trim() ||
                 plan?.trim() ||
                 (renewalDate ? formatSubscriptionDateTime(renewalDate) : "")}
             </Text>
           </View>
         </View>
+
         <View className="sub-price-box">
           <Text className="sub-price">{formatCurrency(price, currency)}</Text>
           <Text className="sub-billing">{billing}</Text>
         </View>
       </View>
+
       {expanded && (
         <View className="sub-bdy">
           <View className="sub-details">
@@ -55,11 +61,10 @@ const Subscriptioncard = ({
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
-                  {paymentMethod?.trim()}
+                  {paymentMethod?.trim() ?? "Not provided"}
                 </Text>
               </View>
             </View>
-
             <View className="sub-row">
               <View className="sub-row-copy">
                 <Text className="sub-label">Category:</Text>
@@ -68,50 +73,38 @@ const Subscriptioncard = ({
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
-                  {category?.trim()}
+                  {(category?.trim() || plan?.trim()) ?? "Not provided"}
                 </Text>
               </View>
             </View>
-
             <View className="sub-row">
               <View className="sub-row-copy">
-                <Text className="sub-label">Plan:</Text>
+                <Text className="sub-label">Started:</Text>
                 <Text
                   className="sub-value"
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
-                  {plan?.trim()}
+                  {startDate
+                    ? formatSubscriptionDateTime(startDate)
+                    : "Not provided"}
                 </Text>
               </View>
             </View>
-
             <View className="sub-row">
               <View className="sub-row-copy">
-                <Text className="sub-label">Start Date:</Text>
+                <Text className="sub-label">Renewal date:</Text>
                 <Text
                   className="sub-value"
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
-                  {startDate ? formatSubscriptionDateTime(startDate) : ""}
+                  {renewalDate
+                    ? formatSubscriptionDateTime(renewalDate)
+                    : "Not provided"}
                 </Text>
               </View>
             </View>
-
-            <View className="sub-row">
-              <View className="sub-row-copy">
-                <Text className="sub-label">Renewal Date:</Text>
-                <Text
-                  className="sub-value"
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                >
-                  {renewalDate ? formatSubscriptionDateTime(renewalDate) : ""}
-                </Text>
-              </View>
-            </View>
-
             <View className="sub-row">
               <View className="sub-row-copy">
                 <Text className="sub-label">Status:</Text>
@@ -120,7 +113,7 @@ const Subscriptioncard = ({
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
-                  {status ? status : ""}
+                  {status ? formatStatusLabel(status) : "Not provided"}
                 </Text>
               </View>
             </View>
@@ -130,5 +123,4 @@ const Subscriptioncard = ({
     </Pressable>
   );
 };
-
-export default Subscriptioncard;
+export default SubscriptionCard;
